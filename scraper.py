@@ -32,7 +32,7 @@ for hit in response.json()["hits"]["hits"]:
     source = BASE_URL + content["directory"]
 
     print(f"Downloading article {source}.")
-    article_page = BeautifulSoup(requests.get(source).text, features="html.parser")
+    article_page = BeautifulSoup(requests.get(source, verify=False).text, features="html.parser")
     text = article_page.find("section", {"class": "bp-textblock-image"}).text.strip()
 
     article = Article(
