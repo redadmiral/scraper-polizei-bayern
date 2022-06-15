@@ -6,16 +6,22 @@ from datastructures import Article
 import scraperwiki
 
 REST_URL: str = "https://www.polizei.bayern.de/es/search"
-BASE_URL: str = "https://www.polizei.bayern.de"
+BASE_URL: str = "https://www.polizei.bayern.de/"
+
+today = datetime.datetime.now()
+yesterday = today - datetime.timedelta(hours=24)
+
+today_str = datetime.datetime.strftime(today, "%d.%m.%Y")
+yesterday_str = datetime.datetime.strftime(yesterday, "%d.%m.%Y")
 
 query = {
     "params": {
         "type": "presse",
-        "q": '{"queryStr":false,"datefr":"14.06.2022","dateto":"15.06.2022","author":null}',
+        "q": f'{{"queryStr":false,"datefr":"{yesterday_str}","dateto":"{today_str}","author":null}}',
     }
 }
 
-response = requests.post(REST_URL, json=query)
+response = requests.post(REST_URL, json=query, verify=False)
 
 for hit in response.json()["hits"]["hits"]:
     content = hit["_source"]
